@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{% block title %}NutriSage AI{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">
+      <i class="bi bi-flower1 text-success"></i> NutriSage <span class="badge bg-success fs-6 ms-1">AI</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house"></i> Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/chat"><i class="bi bi-chat-dots"></i> Chat</a></li>
+        <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/meal-planner"><i class="bi bi-calendar3"></i> Meal Planner</a></li>
+        <li class="nav-item"><a class="nav-link" href="/food-log"><i class="bi bi-journal-text"></i> Food Log</a></li>
+        <li class="nav-item"><a class="nav-link" href="/bmi-calculator"><i class="bi bi-calculator"></i> BMI</a></li>
+        <li class="nav-item"><a class="nav-link" href="/family-profiles"><i class="bi bi-people"></i> Family</a></li>
+        <li class="nav-item ms-2">
+          <button class="btn btn-sm btn-outline-secondary" id="themeToggle" title="Toggle theme">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Flash messages -->
+<div class="container mt-2" id="alertArea">{% block alerts %}{% endblock %}</div>
+
+<!-- Page content -->
+<main class="container py-4 fade-in">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="border-top mt-5 py-3 text-center text-muted small">
+  <div class="container">
+    NutriSage AI &mdash; Powered by <strong>IBM Granite</strong> &amp; watsonx.ai
+    &nbsp;|&nbsp; Built with <i class="bi bi-heart-fill text-danger"></i> for healthy India
+  </div>
+</footer>
+
+{% block modals %}{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}?v=2"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

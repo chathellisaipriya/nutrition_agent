@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}BMI Calculator — NutriSage AI{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <h2 class="fw-bold mb-4 text-center"><i class="bi bi-calculator text-info me-2"></i>BMI Calculator</h2>
+
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <form id="bmiForm">
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label fw-semibold">Weight (kg)</label>
+              <input class="form-control form-control-lg" type="number" id="bWeight" placeholder="60" step="0.1" min="1" required/>
+            </div>
+            <div class="col-6">
+              <label class="form-label fw-semibold">Height (cm)</label>
+              <input class="form-control form-control-lg" type="number" id="bHeight" placeholder="165" step="0.1" min="50" required/>
+            </div>
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <label class="form-label fw-semibold">Age <span class="text-muted small">(optional)</span></label>
+              <input class="form-control" type="number" id="bAge" placeholder="30"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label fw-semibold">Gender <span class="text-muted small">(optional)</span></label>
+              <select class="form-select" id="bGender">
+                <option value="">Select…</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-info text-white w-100 btn-lg fw-semibold">
+            Calculate BMI
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="card border-0 shadow-sm d-none" id="bmiResult">
+      <div class="card-body text-center p-4">
+        <div class="bmi-gauge mb-3">
+          <div class="fs-1 fw-bold" id="bmiValue">—</div>
+          <div class="fs-5" id="bmiCategory">—</div>
+        </div>
+        <div class="row g-2 text-start mb-3">
+          <div class="col-6">
+            <div class="bg-body-secondary rounded-3 p-3">
+              <div class="text-muted small">Ideal weight range</div>
+              <div class="fw-semibold" id="idealRange">—</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="bg-body-secondary rounded-3 p-3">
+              <div class="text-muted small">Est. daily calories (TDEE)</div>
+              <div class="fw-semibold" id="tdeeVal">—</div>
+            </div>
+          </div>
+        </div>
+        <!-- BMI scale bar -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between text-muted" style="font-size:11px;">
+            <span>Underweight<br>&lt;18.5</span>
+            <span>Normal<br>18.5–24.9</span>
+            <span>Overweight<br>25–29.9</span>
+            <span>Obese<br>≥30</span>
+          </div>
+          <div class="progress rounded-pill mt-1" style="height:14px;">
+            <div class="progress-bar bg-info"    style="width:25%"></div>
+            <div class="progress-bar bg-success" style="width:25%"></div>
+            <div class="progress-bar bg-warning" style="width:25%"></div>
+            <div class="progress-bar bg-danger"  style="width:25%"></div>
+          </div>
+          <div class="mt-1 position-relative" style="height:10px;">
+            <div id="bmiMarker" style="position:absolute;top:0;transform:translateX(-50%);font-size:18px;line-height:1;">▲</div>
+          </div>
+        </div>
+        <div class="alert mb-0 text-start" id="bmiAdvice" role="alert"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById("bmiForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const payload = {
+    weight_kg: parseFloat(document.getElementById("bWeight").value),
+    height_cm: parseFloat(document.getElementById("bHeight").value),
+    age:       document.getElementById("bAge").value   || null,
+    gender:    document.getElementById("bGender").value || null,
+  };
+  const r = await fetch("/api/bmi", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  });
+  const d = await r.json();
+  if (d.error) { alert(d.error); return; }
+
+  const colorMap = {success:"text-success", warning:"text-warning", danger:"text-danger", secondary:"text-secondary"};
+  document.getElementById("bmiValue").textContent    = d.bmi;
+  document.getElementById("bmiValue").className      = `fs-1 fw-bold ${colorMap[d.color]||""}`;
+  document.getElementById("bmiCategory").textContent = d.category;
+  document.getElementById("idealRange").textContent  = `${d.ideal_weight_low} – ${d.ideal_weight_high} kg`;
+  document.getElementById("tdeeVal").textContent     = d.tdee_estimate ? `${d.tdee_estimate} kcal/day` : "N/A (enter age & gender)";
+
+  // position marker on scale (bmi 15–45 range mapped to 0–100%)
+  const pct = Math.min(Math.max((d.bmi - 15) / 30 * 100, 2), 98);
+  const marker = document.getElementById("bmiMarker");
+  marker.style.left = pct + "%";
+  marker.className  = colorMap[d.color] || "";
+
+  const advEl = document.getElementById("bmiAdvice");
+  advEl.className = `alert alert-${d.color === "success" ? "success" : d.color === "warning" ? "warning" : "danger"} mb-0 text-start`;
+  advEl.textContent = d.advice;
+
+  document.getElementById("bmiResult").classList.remove("d-none");
+});
+</script>
+{% endblock %}

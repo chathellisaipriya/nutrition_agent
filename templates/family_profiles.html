@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Family Profiles — NutriSage AI{% endblock %}
+{% block content %}
+
+<div class="d-flex align-items-center mb-4">
+  <h2 class="fw-bold mb-0"><i class="bi bi-people text-danger me-2"></i>Family Profiles</h2>
+  <button class="btn btn-danger ms-auto" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+    <i class="bi bi-person-plus-fill me-1"></i>Add Member
+  </button>
+</div>
+
+{% if members %}
+<div class="row g-4" id="membersGrid">
+  {% for m in members %}
+  <div class="col-12 col-md-6 col-lg-4" id="mcard-{{ m.id }}">
+    <div class="card border-0 shadow-sm h-100 member-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <div class="member-avatar bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
+            <i class="bi bi-person-fill fs-4"></i>
+          </div>
+          <div>
+            <h5 class="mb-0 fw-bold">{{ m.name }}</h5>
+            <small class="text-muted">{{ m.age or '—' }} yrs &bull; {{ (m.gender or 'unknown')|title }}</small>
+          </div>
+        </div>
+        <div class="row g-2 mb-3 text-center small">
+          <div class="col-4 bg-body-secondary rounded-3 py-2 mx-1">
+            <div class="fw-bold">{{ m.weight_kg or '—' }}</div><div class="text-muted">kg</div>
+          </div>
+          <div class="col-4 bg-body-secondary rounded-3 py-2 mx-1">
+            <div class="fw-bold">{{ m.height_cm or '—' }}</div><div class="text-muted">cm</div>
+          </div>
+          <div class="col-4 bg-body-secondary rounded-3 py-2 mx-1">
+            {% if m.weight_kg and m.height_cm %}
+            {% set _h = m.height_cm / 100 %}<div class="fw-bold">{{ (m.weight_kg / (_h * _h))|round(1) }}</div><div class="text-muted">BMI</div>
+            {% else %}<div class="fw-bold text-muted">—</div><div class="text-muted">BMI</div>{% endif %}
+          </div>
+        </div>
+        {% for label, val in [("Goal", m.goal), ("Diet", m.diet_type), ("Allergies", m.allergies), ("Conditions", m.diseases)] %}
+        {% if val %}
+        <p class="mb-1 small"><span class="text-muted">{{ label }}:</span> {{ val }}</p>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <div class="card-footer bg-transparent d-flex gap-2">
+        <a href="/meal-planner" class="btn btn-sm btn-outline-primary flex-grow-1">
+          <i class="bi bi-calendar3 me-1"></i>Meal Plan
+        </a>
+        <button class="btn btn-sm btn-outline-danger del-member-btn" data-id="{{ m.id }}">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 text-muted" id="emptyMembers">
+  <i class="bi bi-people fs-1 d-block mb-3 opacity-25"></i>
+  <p class="lead">No family members added yet.</p>
+  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+    <i class="bi bi-person-plus me-1"></i>Add First Member
+  </button>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block modals %}
+<!-- Add Member Modal — outside <main> to avoid stacking-context trap from .fade-in -->
+<div class="modal fade" id="addMemberModal" tabindex="-1" data-bs-focus="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-person-plus-fill me-2 text-danger"></i>Add Family Member</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addMemberForm">
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Full Name *</label><input class="form-control" id="mName" required/></div>
+            <div class="col-md-3"><label class="form-label">Age</label><input class="form-control" type="number" id="mAge"/></div>
+            <div class="col-md-3">
+              <label class="form-label">Gender</label>
+              <select class="form-select" id="mGender"><option value="female">Female</option><option value="male">Male</option><option value="other">Other</option></select>
+            </div>
+            <div class="col-md-4"><label class="form-label">Weight (kg)</label><input class="form-control" type="number" step="0.1" id="mWeight"/></div>
+            <div class="col-md-4"><label class="form-label">Height (cm)</label><input class="form-control" type="number" step="0.1" id="mHeight"/></div>
+            <div class="col-md-4">
+              <label class="form-label">Diet Type</label>
+              <select class="form-select" id="mDiet">
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="jain">Jain</option>
+                <option value="non-vegetarian">Non-Vegetarian</option>
+              </select>
+            </div>
+            <div class="col-md-6"><label class="form-label">Health Goal</label><input class="form-control" id="mGoal" placeholder="Lose weight, manage diabetes…"/></div>
+            <div class="col-md-6"><label class="form-label">Allergies</label><input class="form-control" id="mAllergies" placeholder="nuts, dairy…"/></div>
+            <div class="col-12"><label class="form-label">Health Conditions</label><input class="form-control" id="mDiseases" placeholder="diabetes, hypertension, PCOS…"/></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" id="saveMemberBtn"><i class="bi bi-check-lg me-1"></i>Save Member</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById("saveMemberBtn").addEventListener("click", async () => {
+  const name = document.getElementById("mName").value.trim();
+  if (!name) { alert("Name is required."); return; }
+  const payload = {
+    name:      name,
+    age:       document.getElementById("mAge").value      || null,
+    gender:    document.getElementById("mGender").value,
+    weight_kg: document.getElementById("mWeight").value   || null,
+    height_cm: document.getElementById("mHeight").value   || null,
+    goal:      document.getElementById("mGoal").value,
+    allergies: document.getElementById("mAllergies").value,
+    diseases:  document.getElementById("mDiseases").value,
+    diet_type: document.getElementById("mDiet").value,
+  };
+  const r = await fetch("/api/family", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  });
+  if (r.ok) { window.location.reload(); }
+  else { const d = await r.json(); alert("Error: " + (d.error || "Unknown error")); }
+});
+
+document.querySelectorAll(".del-member-btn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    if (!confirm("Remove this family member? All their logs and plans will also be deleted.")) return;
+    const id = btn.dataset.id;
+    const r = await fetch(`/api/family/${id}`, {method:"DELETE"});
+    if (r.ok) { document.getElementById(`mcard-${id}`).remove(); }
+    else { alert("Error deleting member."); }
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}NutriSage AI — Smart Nutrition for Healthy India{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<section class="hero-section text-center py-5 mb-4 rounded-4">
+  <div class="py-3">
+    <div class="hero-icon mb-3"><i class="bi bi-flower1"></i></div>
+    <h1 class="display-4 fw-bold mb-2">NutriSage <span class="text-success">AI</span></h1>
+    <p class="lead text-muted mb-4">Your AI-powered nutrition companion — personalised advice,<br>Indian meal plans, and health insights powered by IBM Granite.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="/chat" class="btn btn-success btn-lg px-4"><i class="bi bi-chat-dots-fill me-2"></i>Ask NutriSage</a>
+      <a href="/meal-planner" class="btn btn-outline-success btn-lg px-4"><i class="bi bi-calendar3 me-2"></i>Plan My Meals</a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature cards -->
+<div class="row g-4 mb-5">
+  {% set features = [
+    ("chat",            "bi-chat-dots-fill",  "success",  "Nutrition Chat",      "Ask any question about food, macros, diets, Indian recipes, and more."),
+    ("meal-planner",    "bi-calendar3",        "primary",  "Meal Planner",        "Get a personalised 7-day Indian meal plan based on your health profile."),
+    ("food-log",        "bi-journal-check",    "warning",  "Food Log",            "Track your daily meals and get instant calorie & nutrient estimates."),
+    ("bmi-calculator",  "bi-calculator",       "info",     "BMI Calculator",      "Calculate your BMI, get health classification and TDEE estimate."),
+    ("family-profiles", "bi-people-fill",      "danger",   "Family Profiles",     "Manage nutrition plans for every family member individually."),
+    ("dashboard",       "bi-speedometer2",     "secondary","Dashboard",           "View your nutrition trends, meal history, and daily feedback at a glance."),
+  ] %}
+  {% for path, icon, color, title, desc in features %}
+  <div class="col-12 col-sm-6 col-lg-4">
+    <a href="/{{ path }}" class="text-decoration-none">
+      <div class="card h-100 feature-card border-0 shadow-sm">
+        <div class="card-body text-center p-4">
+          <div class="feature-icon bg-{{ color }} bg-opacity-10 text-{{ color }} rounded-circle mb-3">
+            <i class="bi {{ icon }} fs-3"></i>
+          </div>
+          <h5 class="card-title fw-semibold">{{ title }}</h5>
+          <p class="card-text text-muted small">{{ desc }}</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Why NutriSage -->
+<section class="row align-items-center mb-5">
+  <div class="col-md-6 mb-4 mb-md-0">
+    <h2 class="fw-bold mb-3">Why NutriSage?</h2>
+    <ul class="list-unstyled">
+      {% for item in [
+        ("bi-check-circle-fill text-success", "Powered by IBM Granite — advanced, safe AI"),
+        ("bi-check-circle-fill text-success", "Deep knowledge of Indian cuisines & local foods"),
+        ("bi-check-circle-fill text-success", "Personalised advice for your health conditions"),
+        ("bi-check-circle-fill text-success", "Family-friendly — manage everyone's nutrition"),
+        ("bi-check-circle-fill text-success", "RAG-grounded answers from trusted nutrition sources"),
+        ("bi-check-circle-fill text-success", "Safe, non-judgmental, and culturally respectful"),
+      ] %}
+      <li class="mb-2"><i class="bi {{ item[0] }} me-2"></i>{{ item[1] }}</li>
+      {% endfor %}
+    </ul>
+    <a href="/chat" class="btn btn-success mt-2">Get Started <i class="bi bi-arrow-right ms-1"></i></a>
+  </div>
+  <div class="col-md-6">
+    <div class="card border-0 bg-success bg-opacity-10 p-4 rounded-4">
+      <div class="d-flex align-items-start mb-3">
+        <div class="chat-bubble-demo p-3 rounded-3 bg-white shadow-sm flex-grow-1">
+          <p class="mb-1 small text-muted"><i class="bi bi-person-circle me-1"></i> You</p>
+          <p class="mb-0">What should I eat to manage my blood sugar levels?</p>
+        </div>
+      </div>
+      <div class="d-flex align-items-start flex-row-reverse">
+        <div class="chat-bubble-demo p-3 rounded-3 bg-success text-white flex-grow-1">
+          <p class="mb-1 small opacity-75"><i class="bi bi-flower1 me-1"></i> NutriSage</p>
+          <p class="mb-0">Great question! For blood sugar management, focus on low-GI foods: ragi roti, moong dal, bitter gourd (karela) sabzi, and methi leaves. Replace white rice with brown rice or millets…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

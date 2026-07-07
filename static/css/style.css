@@ -1,0 +1,183 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   NutriSage AI  —  Custom Stylesheet
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Variables ────────────────────────────────────────────────────────────── */
+:root {
+  --ns-green:        #198754;
+  --ns-green-light:  #d1fae5;
+  --ns-radius:       1rem;
+  --ns-transition:   0.25s ease;
+  --chat-user-bg:    #198754;
+  --chat-user-color: #ffffff;
+  --chat-ai-bg:      var(--bs-body-bg);
+  --chat-ai-border:  var(--bs-border-color);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+body {
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  transition: background-color var(--ns-transition), color var(--ns-transition);
+}
+
+/* ── Fade-in animation ───────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.fade-in { animation: fadeInUp 0.4s ease forwards; }
+
+/* ── Navbar ───────────────────────────────────────────────────────────────── */
+#mainNav {
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  transition: background-color var(--ns-transition);
+}
+#mainNav .navbar-brand { font-size: 1.35rem; letter-spacing: -0.5px; }
+#mainNav .nav-link {
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.7rem !important;
+  transition: background var(--ns-transition);
+}
+#mainNav .nav-link:hover { background: var(--bs-secondary-bg); }
+#mainNav .nav-link.active { color: var(--ns-green) !important; font-weight: 600; }
+
+/* ── Hero section ─────────────────────────────────────────────────────────── */
+.hero-section {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--ns-green) 8%, var(--bs-body-bg)) 0%,
+    var(--bs-body-bg) 100%);
+  border: 1px solid color-mix(in srgb, var(--ns-green) 15%, transparent);
+}
+.hero-icon {
+  font-size: 3.5rem;
+  color: var(--ns-green);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1);    opacity: 1;   }
+  50%      { transform: scale(1.08); opacity: 0.85; }
+}
+
+/* ── Feature cards ────────────────────────────────────────────────────────── */
+.feature-card {
+  border-radius: var(--ns-radius) !important;
+  transition: transform var(--ns-transition), box-shadow var(--ns-transition);
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.10) !important;
+}
+.feature-icon {
+  width: 64px; height: 64px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+}
+
+/* ── Stat cards ────────────────────────────────────────────────────────────── */
+.stat-card {
+  border-radius: var(--ns-radius) !important;
+  transition: transform var(--ns-transition);
+}
+.stat-card:hover { transform: translateY(-3px); }
+
+/* ── Chat ─────────────────────────────────────────────────────────────────── */
+#chatMessages { scroll-behavior: smooth; }
+
+.chat-msg { display: flex; }
+.chat-msg.user        { justify-content: flex-end; }
+.chat-msg.assistant   { justify-content: flex-start; }
+
+.chat-msg .bubble {
+  max-width: 78%;
+  padding: 0.75rem 1rem;
+  border-radius: 1.25rem;
+  line-height: 1.55;
+  font-size: 0.92rem;
+  word-break: break-word;
+}
+.chat-msg.user .bubble {
+  background: var(--chat-user-bg);
+  color: var(--chat-user-color);
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.assistant .bubble {
+  background: var(--chat-ai-bg);
+  border: 1px solid var(--chat-ai-border);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.error .bubble { background: #fee2e2; color: #991b1b; }
+
+/* Typing indicator */
+.typing-bubble { display: flex; align-items: center; gap: 5px; padding: 0.75rem 1rem; }
+.typing-bubble span {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #adb5bd;
+  animation: blink 1.2s infinite both;
+}
+.typing-bubble span:nth-child(2) { animation-delay: 0.2s; }
+.typing-bubble span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink {
+  0%,80%,100% { opacity: 0.2; transform: scale(0.85); }
+  40%         { opacity: 1;   transform: scale(1);    }
+}
+
+/* ── Meal plan text ───────────────────────────────────────────────────────── */
+.plan-text {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+/* ── Member card ──────────────────────────────────────────────────────────── */
+.member-card {
+  border-radius: var(--ns-radius) !important;
+  transition: transform var(--ns-transition), box-shadow var(--ns-transition);
+}
+.member-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.09) !important;
+}
+
+/* ── BMI gauge ─────────────────────────────────────────────────────────────── */
+.bmi-gauge {
+  padding: 1.5rem;
+  border-radius: var(--ns-radius);
+  background: var(--bs-secondary-bg);
+}
+
+/* ── Modal input fix — ensure inputs inside modals are always interactive ── */
+.modal .form-control,
+.modal input[type="text"],
+.modal input[type="number"],
+.modal input[type="email"],
+.modal textarea,
+.modal select {
+  position: relative;
+  z-index: 1060;
+  pointer-events: auto !important;
+}
+.modal-content {
+  position: relative;
+  z-index: 1060;
+}
+
+/* ── Dark mode adjustments ────────────────────────────────────────────────── */
+[data-bs-theme="dark"] {
+  --chat-ai-bg:     #2d2d2d;
+  --chat-ai-border: #444;
+}
+[data-bs-theme="dark"] #mainNav { background: #1a1a1a; border-color: #333; }
+[data-bs-theme="dark"] .hero-section { border-color: #2a3d2a; }
+[data-bs-theme="dark"] .feature-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.4) !important; }
+
+/* ── Responsive tweaks ────────────────────────────────────────────────────── */
+@media (max-width: 576px) {
+  .hero-section h1 { font-size: 2rem; }
+  .chat-msg .bubble { max-width: 92%; }
+  #chatMessages { height: 360px !important; }
+}

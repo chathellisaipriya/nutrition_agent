@@ -1,0 +1,140 @@
+Nutrition Knowledge Base — Sample Reference Document
+=====================================================
+
+1. MACRONUTRIENTS
+-----------------
+Macronutrients are the three primary energy-providing nutrients:
+
+  Carbohydrates (4 kcal/g)
+    Carbohydrates are the body's preferred energy source. They are found in
+    grains, fruits, vegetables, legumes, and dairy products.
+    - Simple carbohydrates (sugars): quick energy, rapid blood-sugar rise.
+    - Complex carbohydrates (starches, fiber): slower digestion, sustained energy.
+    - Recommended intake: 45–65% of total daily calories (Dietary Guidelines 2020-2025).
+
+  Proteins (4 kcal/g)
+    Proteins are essential for building and repairing tissues, producing enzymes
+    and hormones, and supporting immune function.
+    - Complete proteins (all essential amino acids): meat, poultry, fish, eggs, dairy, soy.
+    - Incomplete proteins: most plant foods (beans, nuts, grains).
+    - RDA: 0.8 g per kg of body weight for sedentary adults;
+            1.2–2.0 g/kg for athletes.
+
+  Fats (9 kcal/g)
+    Dietary fats support cell membranes, hormone production, and fat-soluble
+    vitamin absorption (A, D, E, K).
+    - Unsaturated fats (olive oil, avocado, nuts): heart-healthy.
+    - Saturated fats (butter, red meat): limit to <10% of daily calories.
+    - Trans fats (partially hydrogenated oils): avoid; raise LDL cholesterol.
+    - Omega-3 fatty acids (salmon, flaxseed, walnuts): anti-inflammatory.
+
+
+2. MICRONUTRIENTS — KEY VITAMINS
+---------------------------------
+  Vitamin A:  Vision, immune function, skin health.  Sources: liver, carrots, sweet potato.
+  Vitamin C:  Collagen synthesis, antioxidant, iron absorption.  Sources: citrus, bell pepper.
+  Vitamin D:  Calcium absorption, bone health, immune modulation.  Sources: sunlight, fatty fish.
+  Vitamin E:  Antioxidant protection of cell membranes.  Sources: nuts, seeds, vegetable oils.
+  Vitamin K:  Blood clotting, bone metabolism.  Sources: leafy greens, fermented foods.
+  B-vitamins: Energy metabolism, red blood cell formation, neurological function.
+              Sources: whole grains, meat, eggs, legumes, leafy greens.
+
+
+3. MICRONUTRIENTS — KEY MINERALS
+----------------------------------
+  Calcium    1000–1200 mg/day  Bone/teeth strength, muscle contraction.  Dairy, tofu, kale.
+  Iron       8–18 mg/day       Oxygen transport (hemoglobin).            Red meat, lentils, spinach.
+  Magnesium  310–420 mg/day    Muscle/nerve function, blood sugar.       Nuts, seeds, whole grains.
+  Potassium  2600–3400 mg/day  Blood pressure regulation, heart rhythm.  Banana, potato, beans.
+  Zinc       8–11 mg/day       Immune function, wound healing.           Meat, shellfish, legumes.
+  Sodium     <2300 mg/day      Fluid balance, nerve transmission.        Table salt, processed foods.
+
+
+4. HYDRATION
+------------
+  Water is essential for every metabolic process.
+  - General recommendation: ~3.7 L/day for men, ~2.7 L/day for women (total from all sources).
+  - Increase intake during exercise, hot weather, or illness.
+  - Signs of dehydration: dark urine, fatigue, headache, dizziness.
+
+
+5. DIETARY FIBER
+----------------
+  Fiber supports digestive health, lowers cholesterol, stabilizes blood sugar, and
+  promotes satiety.
+  - Soluble fiber (oats, legumes, apple): dissolves in water; slows digestion.
+  - Insoluble fiber (wheat bran, vegetables): adds bulk; accelerates transit time.
+  - Daily target: 25 g/day (women), 38 g/day (men) — most adults fall short.
+
+
+6. CALORIC BALANCE & WEIGHT MANAGEMENT
+---------------------------------------
+  Energy balance:  Calories in vs. calories out.
+  - Deficit (~500 kcal/day) → ~0.45 kg (1 lb) weight loss per week.
+  - Surplus (~500 kcal/day) → ~0.45 kg weight gain per week.
+
+  Estimated Daily Caloric Needs (Mifflin-St Jeor, moderate activity):
+    Adult male 70 kg, 175 cm, 30 yr:  ~2700 kcal
+    Adult female 60 kg, 165 cm, 30 yr: ~2100 kcal
+
+
+7. POPULAR DIETARY PATTERNS
+----------------------------
+  Mediterranean Diet:
+    Emphasises vegetables, fruits, whole grains, legumes, olive oil, fish.
+    Associated with reduced cardiovascular disease risk.
+
+  DASH Diet (Dietary Approaches to Stop Hypertension):
+    Low sodium, high in potassium, calcium, magnesium.
+    Clinically proven to lower blood pressure.
+
+  Plant-Based / Vegan Diet:
+    No animal products. Requires attention to B12, iron, zinc, calcium, omega-3,
+    and vitamin D supplementation.
+
+  Ketogenic Diet:
+    Very low carbohydrate (<50 g/day), high fat, moderate protein.
+    Induces nutritional ketosis. Short-term weight loss; long-term effects debated.
+
+
+8. PROTEIN-RICH FOODS (per 100 g, cooked)
+------------------------------------------
+  Chicken breast (skinless)  31 g protein  165 kcal
+  Canned tuna (in water)     26 g protein  116 kcal
+  Lentils (boiled)           9 g protein   116 kcal
+  Eggs (whole, boiled)       13 g protein  155 kcal
+  Greek yogurt (plain)       10 g protein   97 kcal
+  Cottage cheese (low-fat)   11 g protein   72 kcal
+  Tofu (firm)                8 g protein   76 kcal
+  Black beans (boiled)       9 g protein  132 kcal
+
+
+9. GLYCEMIC INDEX (GI) REFERENCE
+----------------------------------
+  Low GI (<55):   Most fruits, legumes, non-starchy vegetables, nuts, whole-grain pasta.
+  Medium GI (55-69): Brown rice, oats, honey, whole-wheat bread.
+  High GI (≥70):  White bread, white rice, potatoes, sugary drinks, cornflakes.
+  Lower GI foods produce smaller, slower rises in blood glucose — beneficial for
+  diabetes management and sustained energy.
+
+
+10. SPECIAL NUTRITIONAL CONSIDERATIONS
+----------------------------------------
+  Pregnancy:
+    Folate (400–800 µg/day) — prevents neural tube defects.
+    Iron, calcium, DHA (omega-3) requirements increase.
+
+  Older Adults (>65):
+    Higher protein needs (1.0–1.2 g/kg) to prevent sarcopenia.
+    Vitamin D + calcium supplementation commonly recommended.
+
+  Athletes:
+    Carbohydrate loading pre-event; protein post-workout for muscle repair.
+    Electrolyte replacement for endurance exercise >60 min.
+
+  Vegetarians / Vegans:
+    Monitor B12 (supplement essential for vegans), iron, zinc, iodine, omega-3,
+    and vitamin D.
+
+
+— End of sample nutrition reference document —

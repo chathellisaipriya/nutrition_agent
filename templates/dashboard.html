@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — NutriSage AI{% endblock %}
+{% block content %}
+
+<div class="d-flex align-items-center mb-4">
+  <h2 class="fw-bold mb-0"><i class="bi bi-speedometer2 text-success me-2"></i>Nutrition Dashboard</h2>
+  <button class="btn btn-sm btn-outline-success ms-auto" id="feedbackBtn"><i class="bi bi-stars me-1"></i>Get Daily Feedback</button>
+</div>
+
+<!-- Summary cards -->
+<div class="row g-3 mb-4" id="summaryCards">
+  {% set total_cal     = logs | sum(attribute='calories')  if logs else 0 %}
+  {% set total_protein = logs | sum(attribute='protein_g') if logs else 0 %}
+  {% set total_carbs   = logs | sum(attribute='carbs_g')   if logs else 0 %}
+  {% set total_fat     = logs | sum(attribute='fat_g')     if logs else 0 %}
+  {% for label, value, unit, icon, color in [
+    ("Today's Calories",  total_cal|round(0),     "kcal", "bi-fire",          "warning"),
+    ("Protein",           total_protein|round(1), "g",    "bi-egg-fried",     "success"),
+    ("Carbohydrates",     total_carbs|round(1),   "g",    "bi-grid-3x3-gap",  "primary"),
+    ("Fat",               total_fat|round(1),     "g",    "bi-droplet-half",  "danger"),
+  ] %}
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center p-3 stat-card">
+      <i class="bi {{ icon }} text-{{ color }} fs-3 mb-1"></i>
+      <div class="fs-3 fw-bold">{{ value }}</div>
+      <div class="text-muted small">{{ label }} <span class="badge bg-{{ color }} bg-opacity-10 text-{{ color }}">{{ unit }}</span></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Daily feedback -->
+<div class="card border-0 shadow-sm mb-4 d-none" id="feedbackCard">
+  <div class="card-header bg-success text-white fw-semibold"><i class="bi bi-stars me-1"></i>AI Daily Feedback</div>
+  <div class="card-body" id="feedbackText"><em class="text-muted">Loading…</em></div>
+</div>
+
+<!-- Recent food logs -->
+<div class="row g-4">
+  <div class="col-12 col-md-7">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header fw-semibold"><i class="bi bi-journal-text me-1"></i>Recent Food Logs</div>
+      <div class="card-body p-0">
+        {% if logs %}
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light"><tr><th>Food</th><th>Qty</th><th>Calories</th><th>Time</th></tr></thead>
+            <tbody>
+              {% for l in logs %}
+              <tr>
+                <td>{{ l.food_name }}</td>
+                <td class="text-muted small">{{ l.quantity }}</td>
+                <td><span class="badge bg-warning text-dark">{{ l.calories|round(0) }} kcal</span></td>
+                <td class="text-muted small">{{ l.logged_at.strftime('%d %b, %H:%M') if l.logged_at else '' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-4 text-center text-muted">
+          <i class="bi bi-journal-x fs-2 d-block mb-2"></i>No food logged today.
+          <a href="/food-log" class="btn btn-sm btn-success mt-2">Log your first meal</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-5">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header fw-semibold"><i class="bi bi-calendar3 me-1"></i>Recent Meal Plans</div>
+      <div class="card-body">
+        {% if plans %}
+          {% for p in plans %}
+          <div class="mb-3 p-3 rounded-3 bg-success bg-opacity-10">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="fw-semibold">{{ p.goal }}</span>
+              <span class="text-muted small">{{ p.created_at.strftime('%d %b') if p.created_at else '' }}</span>
+            </div>
+            <p class="small mb-0 text-muted">{{ p.plan_text[:140] }}…</p>
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="text-center text-muted py-3">
+          <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>No meal plans yet.
+          <a href="/meal-planner" class="btn btn-sm btn-success mt-2">Create a plan</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById("feedbackBtn").addEventListener("click", async () => {
+  const card = document.getElementById("feedbackCard");
+  const txt  = document.getElementById("feedbackText");
+  card.classList.remove("d-none");
+  txt.innerHTML = '<em class="text-muted">Analysing your day with AI…</em>';
+  try {
+    const r = await fetch("/api/daily-feedback");
+    const d = await r.json();
+    txt.innerHTML = d.feedback ? d.feedback.replace(/\n/g,"<br>") : "No feedback available.";
+  } catch(e) { txt.innerHTML = "Error fetching feedback."; }
+});
+</script>
+{% endblock %}

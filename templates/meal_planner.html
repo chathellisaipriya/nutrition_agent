@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Meal Planner — NutriSage AI{% endblock %}
+{% block content %}
+
+<h2 class="fw-bold mb-4"><i class="bi bi-calendar3 text-primary me-2"></i>Personalised Meal Planner</h2>
+
+<div class="row g-4">
+  <!-- Form -->
+  <div class="col-12 col-lg-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header fw-semibold bg-primary text-white"><i class="bi bi-person-lines-fill me-1"></i>Your Health Profile</div>
+      <div class="card-body">
+        <form id="mealPlanForm">
+          {% if members %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Load Family Member</label>
+            <select class="form-select" id="memberSelect">
+              <option value="">— Enter manually —</option>
+              {% for m in members %}
+              <option value="{{ m.id }}"
+                data-name="{{ m.name }}" data-age="{{ m.age }}" data-gender="{{ m.gender }}"
+                data-weight="{{ m.weight_kg }}" data-height="{{ m.height_cm }}"
+                data-goal="{{ m.goal }}" data-diet="{{ m.diet_type }}"
+                data-allergies="{{ m.allergies }}" data-diseases="{{ m.diseases }}">
+                {{ m.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <hr/>
+          {% endif %}
+          <div class="row g-2 mb-2">
+            <div class="col-6"><label class="form-label">Name</label><input class="form-control" id="pName" placeholder="Your name"/></div>
+            <div class="col-3"><label class="form-label">Age</label><input class="form-control" type="number" id="pAge" placeholder="30"/></div>
+            <div class="col-3">
+              <label class="form-label">Gender</label>
+              <select class="form-select" id="pGender"><option value="female">Female</option><option value="male">Male</option><option value="other">Other</option></select>
+            </div>
+          </div>
+          <div class="row g-2 mb-2">
+            <div class="col-6"><label class="form-label">Weight (kg)</label><input class="form-control" type="number" id="pWeight" placeholder="60"/></div>
+            <div class="col-6"><label class="form-label">Height (cm)</label><input class="form-control" type="number" id="pHeight" placeholder="165"/></div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Goal</label>
+            <select class="form-select" id="pGoal">
+              <option>Lose weight</option><option>Gain muscle</option><option>Maintain weight</option>
+              <option>Manage diabetes</option><option>Manage hypertension</option>
+              <option>Improve energy</option><option>Build immunity</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Activity Level</label>
+            <select class="form-select" id="pActivity">
+              <option>sedentary</option><option selected>moderately active</option>
+              <option>very active</option><option>athlete</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Diet Type</label>
+            <select class="form-select" id="pDiet">
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+              <option value="jain">Jain</option>
+              <option value="non-vegetarian">Non-Vegetarian</option>
+            </select>
+          </div>
+          <div class="mb-2"><label class="form-label">Allergies</label><input class="form-control" id="pAllergies" placeholder="nuts, gluten…"/></div>
+          <div class="mb-3"><label class="form-label">Health Conditions / Diseases</label><input class="form-control" id="pDiseases" placeholder="diabetes, PCOS…"/></div>
+          <button type="submit" class="btn btn-primary w-100" id="generateBtn">
+            <span id="planSpinner" class="spinner-border spinner-border-sm me-2 d-none"></span>
+            <i class="bi bi-stars me-1"></i>Generate 7-Day Meal Plan
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="col-12 col-lg-7">
+    <div class="card border-0 shadow-sm h-100" id="planResultCard" style="display:none!important">
+      <div class="card-header fw-semibold d-flex align-items-center justify-content-between">
+        <span><i class="bi bi-calendar3-week me-1"></i>Your 7-Day Meal Plan</span>
+        <span class="badge bg-primary" id="bmiResultBadge"></span>
+      </div>
+      <div class="card-body">
+        <div id="planResultText" class="plan-text"></div>
+      </div>
+    </div>
+    <div id="planPlaceholder" class="text-center text-muted py-5">
+      <i class="bi bi-calendar3 fs-1 d-block mb-3 text-primary opacity-25"></i>
+      <p>Fill in your profile and click <strong>Generate</strong> to get a personalised Indian meal plan.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+// Auto-fill from family member select
+const memberSel = document.getElementById("memberSelect");
+if (memberSel) memberSel.addEventListener("change", function() {
+  const opt = this.options[this.selectedIndex];
+  if (!opt.value) return;
+  document.getElementById("pName").value      = opt.dataset.name || "";
+  document.getElementById("pAge").value       = opt.dataset.age  || "";
+  document.getElementById("pGender").value    = opt.dataset.gender || "female";
+  document.getElementById("pWeight").value    = opt.dataset.weight || "";
+  document.getElementById("pHeight").value    = opt.dataset.height || "";
+  document.getElementById("pGoal").value      = opt.dataset.goal || "";
+  document.getElementById("pDiet").value      = opt.dataset.diet || "vegetarian";
+  document.getElementById("pAllergies").value = opt.dataset.allergies || "";
+  document.getElementById("pDiseases").value  = opt.dataset.diseases || "";
+});
+
+document.getElementById("mealPlanForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = document.getElementById("generateBtn");
+  const spin = document.getElementById("planSpinner");
+  btn.disabled = true; spin.classList.remove("d-none");
+
+  const payload = {
+    name:       document.getElementById("pName").value,
+    age:        document.getElementById("pAge").value,
+    gender:     document.getElementById("pGender").value,
+    weight_kg:  document.getElementById("pWeight").value,
+    height_cm:  document.getElementById("pHeight").value,
+    goal:       document.getElementById("pGoal").value,
+    activity:   document.getElementById("pActivity").value,
+    diet_type:  document.getElementById("pDiet").value,
+    allergies:  document.getElementById("pAllergies").value,
+    diseases:   document.getElementById("pDiseases").value,
+    preferences:"Indian cuisine",
+    member_id:  memberSel ? memberSel.value || null : null,
+  };
+
+  try {
+    const r = await fetch("/api/diet-plan", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    });
+    const d = await r.json();
+    if (d.error) { alert("Error: " + d.error); return; }
+    document.getElementById("planPlaceholder").style.display = "none";
+    const card = document.getElementById("planResultCard");
+    card.style.removeProperty("display");
+    document.getElementById("planResultText").innerHTML = d.plan.replace(/\n/g,"<br>");
+    document.getElementById("bmiResultBadge").textContent = `BMI ${d.bmi} — ${d.bmi_category}`;
+  } catch(err) { alert("Network error: " + err); }
+  finally { btn.disabled = false; spin.classList.add("d-none"); }
+});
+</script>
+{% endblock %}
