@@ -261,7 +261,8 @@ def api_bmi():
         height = float(data["height_cm"])
     except (KeyError, ValueError, TypeError):
         return jsonify({"error": "weight_kg and height_cm are required numbers"}), 400
-    result = calculate_bmi(weight, height, data.get("age"), data.get("gender"))
+    age = int(data["age"]) if data.get("age") is not None else None
+    result = calculate_bmi(weight, height, age, data.get("gender"))
     return jsonify(result)
 
 
